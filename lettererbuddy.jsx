@@ -9,10 +9,11 @@ var newScript = true;
 var lastScriptIndex = 0;
 
 var directory = new File($.fileName).parent;
+var windowDimensions = getIdealDimensions();
 
 // DIALOG
 // ======
-var dialog = new Window("window", undefined, undefined, {maximizeButton: false}); 
+var dialog = new Window("palette", "Letterer Buddy", undefined, {maximizeButton: false}); 
     dialog.text = "Letterer Buddy"; 
     dialog.orientation = "column"; 
     dialog.alignChildren = ["center","top"]; 
@@ -173,6 +174,10 @@ var removeCurlyBracedText = settingsTab.add("checkbox", undefined, undefined, {n
     }
 };
 
+var pasteFromColumn = settingsTab.add("dropdownlist", undefined, [1, 2, 3], {name: "pasteFromColumn"}); 
+    pasteFromColumn.text = "Paste from Column:"; 
+    pasteFromColumn.selection = 0;
+
 var saveSettings = settingsTab.add("checkbox", undefined, undefined, {name: "saveSettings"}); 
     saveSettings.text = "Save Settings";
 
@@ -281,6 +286,7 @@ function resetOptions() {
     removeParentheticalText.value = 0;
     removeBracketedText.value = 0;
     removeCurlyBracedText.value = 0;
+    pasteFromColumn.selection = 0;
 }
 
 function loadOptions() {
@@ -335,6 +341,9 @@ function loadOptions() {
             if (option[0] == "removeCurlyBracedText") {
                 removeCurlyBracedText.value = (option[1] == "true");
             }
+            if (option[0] == "pasteFromColumn") {
+                pasteFromColumn.selection = option[1];
+            }
         }
     }
 }
@@ -364,6 +373,7 @@ function saveOptions() {
         optionsFile.writeln("removeParentheticalText=" + removeParentheticalText.value);
         optionsFile.writeln("removeBracketedText=" + removeBracketedText.value);
         optionsFile.writeln("removeCurlyBracedText=" + removeCurlyBracedText.value);
+        optionsFile.writeln("pasteFromColumn=" + pasteFromColumn.selection);
     }
 }
 
