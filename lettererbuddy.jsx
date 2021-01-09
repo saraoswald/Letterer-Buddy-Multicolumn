@@ -219,7 +219,10 @@ function selectionChanged() {
 function placeText() {
     if (list.selection != null) {
         if (doc.selection[0] instanceof TextFrame) {
-            doc.selection[0].contents = list.selection.text;
+            var textToPlace = pasteFromColumn.selection > 0 && pasteFromColumn.selection <= list.selection.subItems.length
+                ? list.selection.subItems[pasteFromColumn.selection - 1].text
+                : list.selection.text;
+            doc.selection[0].contents = textToPlace;
             if (list.selection < list.items.length) {
                 list.selection = list.selection + 1;
             }
