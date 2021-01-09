@@ -9,10 +9,11 @@ var newScript = true;
 var lastScriptIndex = 0;
 
 var directory = new File($.fileName).parent;
+var windowDimensions = getIdealDimensions();
 
 // DIALOG
 // ======
-var dialog = new Window("window", undefined, undefined, {maximizeButton: false}); 
+var dialog = new Window("palette", "Letterer Buddy", undefined, {maximizeButton: false}); 
     dialog.text = "Letterer Buddy"; 
     dialog.orientation = "column"; 
     dialog.alignChildren = ["center","top"]; 
@@ -27,7 +28,8 @@ var dialog = new Window("window", undefined, undefined, {maximizeButton: false})
 // =======
 var tpanel1 = dialog.add("tabbedpanel", undefined, undefined, {name: "tpanel1"}); 
     tpanel1.alignChildren = "fill"; 
-    tpanel1.preferredSize.width = 324; 
+    tpanel1.preferredSize.width = windowDimensions.width;
+    tpanel1.preferredSize.height = windowDimensions.height - 70;  
     tpanel1.margins = 0; 
 
 // SCRIPTTAB
@@ -39,9 +41,13 @@ var scriptTab = tpanel1.add("tab", undefined, undefined, {name: "scriptTab"});
     scriptTab.spacing = 10; 
     scriptTab.margins = 10; 
 
-var list = scriptTab.add("listbox", undefined, undefined, {name: "list"}); 
-    list.preferredSize.width = 300; 
-    list.preferredSize.height = 200; 
+var list = scriptTab.add("listbox", undefined, undefined, {
+        name: "scriptList",
+        numberOfColumns: 3,
+        showHeaders: true
+    }); 
+    list.preferredSize.width = windowDimensions.width - 30; 
+    list.preferredSize.height = windowDimensions.height - 150; 
 
 // ACTIONSPANEL
 // ============
@@ -51,7 +57,7 @@ var actionsPanel = scriptTab.add("panel", undefined, undefined, {name: "actionsP
     actionsPanel.alignChildren = ["center","top"]; 
     actionsPanel.spacing = 10; 
     actionsPanel.margins = 10; 
-    actionsPanel.preferredSize.width = 300;
+    actionsPanel.preferredSize.width = windowDimensions.width - 30;
 
 var loadScript = actionsPanel.add("button", undefined, undefined, {name: "loadScript"}); 
     loadScript.text = "Load Script"; 
@@ -172,6 +178,10 @@ var removeCurlyBracedText = settingsTab.add("checkbox", undefined, undefined, {n
     }
 };
 
+var pasteFromColumn = settingsTab.add("dropdownlist", undefined, [1, 2, 3], {name: "pasteFromColumn"}); 
+    pasteFromColumn.text = "Paste from Column:"; 
+    pasteFromColumn.selection = 0;
+
 var saveSettings = settingsTab.add("checkbox", undefined, undefined, {name: "saveSettings"}); 
     saveSettings.text = "Save Settings";
 
@@ -209,7 +219,10 @@ function selectionChanged() {
 function placeText() {
     if (list.selection != null) {
         if (doc.selection[0] instanceof TextFrame) {
-            doc.selection[0].contents = list.selection.text;
+            var textToPlace = pasteFromColumn.selection > 0 && pasteFromColumn.selection <= list.selection.subItems.length
+                ? list.selection.subItems[pasteFromColumn.selection - 1].text
+                : list.selection.text;
+            doc.selection[0].contents = textToPlace;
             if (list.selection < list.items.length) {
                 list.selection = list.selection + 1;
             }
@@ -224,9 +237,21 @@ function populateList() {
     }
     else if (scriptFile != "" && scriptFile != null) {
         list.removeAll();
-        for (var i=0; i<script.length; i++) {
-            list.add('item', script[i]);
-        }
+
+        forEach(script, function(line){
+            if( line.length <= 0 ) return; // ignore empty lines
+            var lineSplitByTabs = line.split('\t');
+            var listItem = list.add("item", lineSplitByTabs[0]);
+
+            // if there's more than one item, add 'em
+            if(lineSplitByTabs.length > 1){
+                forEach(lineSplitByTabs, function(subItem, idx){
+                    if(idx > 0 && !!listItem.subItems[idx - 1]){ // don't add the first item twice
+                        listItem.subItems[idx - 1].text = subItem;
+                    }
+                })
+            }
+        })
         if (newScript) {
             list.selection = 0;
         }
@@ -245,7 +270,7 @@ function readScript() {
         for (var i=0; i<lineList.length; i++) {
             var line = lineList[i];
             if (line != '') {
-                script.push(line.replace('\t', ''));
+                script.push(line);
             }
         }
     }
@@ -280,6 +305,7 @@ function resetOptions() {
     removeParentheticalText.value = 0;
     removeBracketedText.value = 0;
     removeCurlyBracedText.value = 0;
+    pasteFromColumn.selection = 0;
 }
 
 function loadOptions() {
@@ -334,6 +360,9 @@ function loadOptions() {
             if (option[0] == "removeCurlyBracedText") {
                 removeCurlyBracedText.value = (option[1] == "true");
             }
+            if (option[0] == "pasteFromColumn") {
+                pasteFromColumn.selection = option[1];
+            }
         }
     }
 }
@@ -363,6 +392,7 @@ function saveOptions() {
         optionsFile.writeln("removeParentheticalText=" + removeParentheticalText.value);
         optionsFile.writeln("removeBracketedText=" + removeBracketedText.value);
         optionsFile.writeln("removeCurlyBracedText=" + removeCurlyBracedText.value);
+        optionsFile.writeln("pasteFromColumn=" + pasteFromColumn.selection);
     }
 }
 
@@ -512,6 +542,15 @@ function trim(strValue){
     return strValue !== null ? str.replace(/(^\s*)|(\s*$)/g,"") : "";
 }
 
+// basically Array.forEach
+function forEach(arr, fn) {
+    try{
+        for (var i = 0; i < arr.length; i++) {
+            fn(arr[i], i);
+        }
+    } catch(err){ alert(err) }
+}
+
 function removeEmptyLines(array) {
     var newArray = [];
     for (var i=0; i<array.length; i++) {
@@ -520,4 +559,12 @@ function removeEmptyLines(array) {
         }
     }
     return newArray;
+}
+
+function getIdealDimensions(){
+    var drawableHeight = app.activeWindow.bounds[2]; // does not include window frame
+    return {
+        height: drawableHeight - 100,
+        width: 350
+    }
 }
