@@ -41,7 +41,11 @@ var scriptTab = tpanel1.add("tab", undefined, undefined, {name: "scriptTab"});
     scriptTab.spacing = 10; 
     scriptTab.margins = 10; 
 
-var list = scriptTab.add("listbox", undefined, undefined, {name: "list"}); 
+var list = scriptTab.add("listbox", undefined, undefined, {
+        name: "scriptList",
+        numberOfColumns: 3,
+        showHeaders: true
+    }); 
     list.preferredSize.width = windowDimensions.width - 30; 
     list.preferredSize.height = windowDimensions.height - 150; 
 
@@ -230,9 +234,21 @@ function populateList() {
     }
     else if (scriptFile != "" && scriptFile != null) {
         list.removeAll();
-        for (var i=0; i<script.length; i++) {
-            list.add('item', script[i]);
-        }
+
+        forEach(script, function(line){
+            if( line.length <= 0 ) return; // ignore empty lines
+            var lineSplitByTabs = line.split('\t');
+            var listItem = list.add("item", lineSplitByTabs[0]);
+
+            // if there's more than one item, add 'em
+            if(lineSplitByTabs.length > 1){
+                forEach(lineSplitByTabs, function(subItem, idx){
+                    if(idx > 0 && !!listItem.subItems[idx - 1]){ // don't add the first item twice
+                        listItem.subItems[idx - 1].text = subItem;
+                    }
+                })
+            }
+        })
         if (newScript) {
             list.selection = 0;
         }
@@ -251,7 +267,7 @@ function readScript() {
         for (var i=0; i<lineList.length; i++) {
             var line = lineList[i];
             if (line != '') {
-                script.push(line.replace('\t', ''));
+                script.push(line);
             }
         }
     }
@@ -521,6 +537,15 @@ function removeCurlyBracedTextFunction() {
 function trim(strValue){
     var str = new String(strValue);
     return strValue !== null ? str.replace(/(^\s*)|(\s*$)/g,"") : "";
+}
+
+// basically Array.forEach
+function forEach(arr, fn) {
+    try{
+        for (var i = 0; i < arr.length; i++) {
+            fn(arr[i], i);
+        }
+    } catch(err){ alert(err) }
 }
 
 function removeEmptyLines(array) {
