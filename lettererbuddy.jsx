@@ -27,7 +27,8 @@ var dialog = new Window("window", undefined, undefined, {maximizeButton: false})
 // =======
 var tpanel1 = dialog.add("tabbedpanel", undefined, undefined, {name: "tpanel1"}); 
     tpanel1.alignChildren = "fill"; 
-    tpanel1.preferredSize.width = 324; 
+    tpanel1.preferredSize.width = windowDimensions.width;
+    tpanel1.preferredSize.height = windowDimensions.height - 70;  
     tpanel1.margins = 0; 
 
 // SCRIPTTAB
@@ -40,8 +41,8 @@ var scriptTab = tpanel1.add("tab", undefined, undefined, {name: "scriptTab"});
     scriptTab.margins = 10; 
 
 var list = scriptTab.add("listbox", undefined, undefined, {name: "list"}); 
-    list.preferredSize.width = 300; 
-    list.preferredSize.height = 200; 
+    list.preferredSize.width = windowDimensions.width - 30; 
+    list.preferredSize.height = windowDimensions.height - 150; 
 
 // ACTIONSPANEL
 // ============
@@ -51,7 +52,7 @@ var actionsPanel = scriptTab.add("panel", undefined, undefined, {name: "actionsP
     actionsPanel.alignChildren = ["center","top"]; 
     actionsPanel.spacing = 10; 
     actionsPanel.margins = 10; 
-    actionsPanel.preferredSize.width = 300;
+    actionsPanel.preferredSize.width = windowDimensions.width - 30;
 
 var loadScript = actionsPanel.add("button", undefined, undefined, {name: "loadScript"}); 
     loadScript.text = "Load Script"; 
@@ -520,4 +521,12 @@ function removeEmptyLines(array) {
         }
     }
     return newArray;
+}
+
+function getIdealDimensions(){
+    var drawableHeight = app.activeWindow.bounds[2]; // does not include window frame
+    return {
+        height: drawableHeight - 100,
+        width: 350
+    }
 }
