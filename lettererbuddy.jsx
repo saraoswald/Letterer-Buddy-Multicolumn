@@ -10,6 +10,7 @@ var lastScriptIndex = 0;
 
 var directory = new File($.fileName).parent;
 var windowDimensions = getIdealDimensions();
+var isPaused = false;
 
 // DIALOG
 // ======
@@ -74,6 +75,13 @@ var resetScript = actionsPanel.add("button", undefined, undefined, {name: "reset
         resetOptions();
         readScript();
         populateList();
+    };
+
+var pauseBtn = actionsPanel.add("button", undefined, undefined, {name: "pauseBtn"}); 
+    pauseBtn.text = "Pause"; 
+    pauseBtn.onClick = function() {
+        isPaused = !isPaused;
+        pauseBtn.text = isPaused ? "Resume" : "Pause";
     };
 
 // SETTINGSTAB
@@ -211,7 +219,7 @@ dialog.show();
 doc.addEventListener('afterSelectionChanged', selectionChanged);
 
 function selectionChanged() {
-    if (doc.selection[0] instanceof TextFrame && doc.selection[0].contents == '' && doc.selection[1] == null) {
+    if (!isPaused && doc.selection[0] instanceof TextFrame && doc.selection[0].contents == '' && doc.selection[1] == null) {
         placeText();
     }
 }
