@@ -9,7 +9,11 @@ This is a fork of [Fog's Letterer Buddy](https://github.com/RisingFog/InDesign-S
 ## Usage
 **To start up Letterer Buddy,** run the script with an InDesign document open ([See my guide on installing InDesign scripts for more info](https://github.com/saraoswald/Manga-Scripts#how-to-use-scripts-in-indesign)).
 
-**To open a script,** select "Load Script", and select your text file from the file browser. The text file **must be a plain text file with the extension .txt**. There are a few parsing capabilities available, but you must do the bulk of the massaging outside of Letterer Buddy. A tool for turning Word documents into plain text files can be found here: https://lb-script-parser.glitch.me/
+**To open a script,** select "Load Script", and select your text file from the file browser. The text file **must be a plain text file with the extension .txt**. There are a few parsing capabilities available, but you must do the bulk of the massaging outside of Letterer Buddy.
+
+A sample script that's correctly formatted and tab-delimited can be found [here](resources/sample-script.txt). 
+
+A tool for turning Word documents into plain text files can be found here: https://lb-script-parser.glitch.me/
 
 **To place text**, there are two suggested workflows. 
 ---
@@ -36,8 +40,9 @@ Individual Option: **Place one frame at a time, and fill it with text**
 - Pause text insertion with the "Pause" button a the bottom of the window. This is helpful for when you've made a mistake. 
 
 ## Additional Tools
-[My lettering guides](https://github.com/saraoswald/lettering-tutorials/wiki/Text-Placement-and-Balancing)
-[My tool for turning Word documents into plain text files](https://lb-script-parser.glitch.me/)
+- [My lettering guides](https://github.com/saraoswald/lettering-tutorials/wiki/Text-Placement-and-Balancing)
+- [My tool for turning Word documents into plain text files](https://lb-script-parser.glitch.me/)
+- [A sample script that is correctly formatted](resources/sample-script.txt) (used in the sample images above)
 
 ### Navigational Shortcuts
 This repository contains two additional scripts that let you change the selected row of the script. Bind these two scripts to keyboard shortcuts to make it easier to navigate the script more quickly. 
