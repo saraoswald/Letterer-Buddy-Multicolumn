@@ -1,0 +1,26 @@
+Pride and Prejudice by Jane Austen
+Adaptation by Sara Linsley
+Source: https://www.gutenberg.org/files/42671/42671-h/42671-h.htm
+
+1.1	Caption:	It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.
+	Mrs. Bennet: 	My dear Mr. Bennet,
+		have you heard that Netherfield Park is let at last?
+	Mr. Bennet:	I had not.
+	Mrs. Bennet: 	But it is,
+		for Mrs. Long has just been here, and she told me all about it.
+	Mrs. Bennet:	Do not you want to know who has taken it?
+	Mr. Bennet:	You want to tell me, and I have no objection to hearing it.
+		What is his name?
+	Mrs. Bennet:	Bingley.
+	Mr. Bennet:	Is he married or single?
+	Mrs. Bennet: 	A single man of large fortune—four or five thousand a year.
+	Mrs. Bennet/aside:	What a fine thing for our girls! ☆
+	Mr. Bennet: 	How so? how can it affect them?
+.4	Mrs. Bennet: 	You must know that I am thinking of his marrying one of them.
+	Mrs. Bennet/aside:	You have no compassion on my poor nerves.
+	Mr. Bennet: 	You mistake me, my dear. 
+		I have a high respect for your nerves. They are my old friends.
+		I have heard you mention them with consideration these twenty years at least.
+.5	Mr. Bennet: 	But I hope you will get over it, and live to see many young men of four thousand a year come into the neighbourhood.
+	Mrs. Bennet: 	It will be no use to us, if twenty such should come since you will not visit them.
+	Mr. Bennet:	Depend upon it, my dear, that when there are twenty, I will visit them all.
