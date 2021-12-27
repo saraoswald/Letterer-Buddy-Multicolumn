@@ -14,7 +14,11 @@ var isPaused = false;
 
 // DIALOG
 // ======
-var dialog = new Window("palette", "Letterer Buddy", undefined, {maximizeButton: false}); 
+var dialog = new Window("palette", "Letterer Buddy", undefined, { 
+        resizeable: true, 
+        maximizeButton: false, 
+        frameSize: windowDimensions
+    }); 
     dialog.text = "Letterer Buddy"; 
     dialog.orientation = "column"; 
     dialog.alignChildren = ["center","top"]; 
@@ -24,13 +28,18 @@ var dialog = new Window("palette", "Letterer Buddy", undefined, {maximizeButton:
         doc.removeEventListener('afterSelectionChanged', selectionChanged);
         saveOptions();
     };
+    dialog.onResizing = function(){
+        this.layout.layout();
+        this.layout.resize();
+        tpanel1.layout.resize();
+        tpanel1.layout.layout();
+    };
 
 // TPANEL1
 // =======
 var tpanel1 = dialog.add("tabbedpanel", undefined, undefined, {name: "tpanel1"}); 
     tpanel1.alignChildren = "fill"; 
-    tpanel1.preferredSize.width = windowDimensions.width;
-    tpanel1.preferredSize.height = windowDimensions.height - 70;  
+    tpanel1.alignment = ["fill", "fill"];
     tpanel1.margins = 0; 
 
 // SCRIPTTAB
@@ -47,8 +56,7 @@ var list = scriptTab.add("listbox", undefined, undefined, {
         numberOfColumns: 3,
         showHeaders: true
     }); 
-    list.preferredSize.width = windowDimensions.width - 30; 
-    list.preferredSize.height = windowDimensions.height - 150; 
+    list.alignment = ["fill", "fill"];
 
 // ACTIONSPANEL
 // ============
@@ -58,7 +66,7 @@ var actionsPanel = scriptTab.add("panel", undefined, undefined, {name: "actionsP
     actionsPanel.alignChildren = ["center","top"]; 
     actionsPanel.spacing = 10; 
     actionsPanel.margins = 10; 
-    actionsPanel.preferredSize.width = windowDimensions.width - 30;
+    actionsPanel.alignment = ["fill", "bottom"]; 
 
 var loadScript = actionsPanel.add("button", undefined, undefined, {name: "loadScript"}); 
     loadScript.text = "Load Script"; 
