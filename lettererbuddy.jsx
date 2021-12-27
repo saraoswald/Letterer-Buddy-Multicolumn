@@ -53,9 +53,11 @@ var scriptTab = tpanel1.add("tab", undefined, undefined, {name: "scriptTab"});
 
 var list = scriptTab.add("listbox", undefined, undefined, {
         name: "scriptList",
-        numberOfColumns: 3,
-        showHeaders: true
+        numberOfColumns: 4,
+        showHeaders: true,
+        columnTitles: ["Col 1", "Col 2", "Col 3", "Col 4"]
     }); 
+    list.visible = false;
     list.alignment = ["fill", "fill"];
 
 // ACTIONSPANEL
@@ -85,11 +87,14 @@ var resetScript = actionsPanel.add("button", undefined, undefined, {name: "reset
         populateList();
     };
 
-var pauseBtn = actionsPanel.add("button", undefined, undefined, {name: "pauseBtn"}); 
-    pauseBtn.text = "Pause"; 
+var pauseBtnHelpTipPause = "Pause text insertion without closing the Letterer Buddy window. The selected row will be preserved while paused.";
+var pauseBtnHelpTipResume = "Resume text insertion from the currently selected row.";
+var pauseBtn = actionsPanel.add("button", undefined, "Pause"); 
+    pauseBtn.helpTip = pauseBtnHelpTipPause;
     pauseBtn.onClick = function() {
         isPaused = !isPaused;
         pauseBtn.text = isPaused ? "Resume" : "Pause";
+        pauseBtn.helpTip = isPaused ? pauseBtnHelpTipResume : pauseBtnHelpTipPause;
     };
 
 // SETTINGSTAB
@@ -253,7 +258,6 @@ function populateList() {
     }
     else if (scriptFile != "" && scriptFile != null) {
         list.removeAll();
-
         forEach(script, function(line){
             if( line.length <= 0 ) return; // ignore empty lines
             var lineSplitByTabs = line.split('\t');
@@ -270,10 +274,12 @@ function populateList() {
         })
         if (newScript) {
             list.selection = 0;
+            list.helpTip = 'Pasting "' + unescape(scriptFileName) + '"'; 
         }
         else {
             list.selection = lastScriptIndex;
         }
+        list.visible = true;
     }
 }
 
