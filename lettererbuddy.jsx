@@ -9,15 +9,13 @@ var newScript = true;
 var lastScriptIndex = 0;
 
 var directory = new File($.fileName).parent;
-var windowDimensions = getIdealDimensions();
 var isPaused = false;
 
 // DIALOG
 // ======
 var dialog = new Window("palette", "Letterer Buddy", undefined, { 
         resizeable: true, 
-        maximizeButton: false, 
-        frameSize: windowDimensions
+        maximizeButton: false
     }); 
     dialog.text = "Letterer Buddy"; 
     dialog.orientation = "column"; 
@@ -579,12 +577,4 @@ function removeEmptyLines(array) {
         }
     }
     return newArray;
-}
-
-function getIdealDimensions(){
-    var drawableHeight = app.activeWindow.bounds[2]; // does not include window frame
-    return {
-        height: drawableHeight - 100,
-        width: 350
-    }
 }
