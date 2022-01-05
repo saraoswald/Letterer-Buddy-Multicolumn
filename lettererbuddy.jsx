@@ -57,7 +57,6 @@ var list = scriptTab.add("listbox", undefined, undefined, {
         showHeaders: true,
         columnTitles: ["Col 1", "Col 2", "Col 3", "Col 4"]
     }); 
-    list.visible = false;
     list.alignment = ["fill", "fill"];
 
 // ACTIONSPANEL
@@ -279,7 +278,6 @@ function populateList() {
         else {
             list.selection = lastScriptIndex;
         }
-        list.visible = true;
     }
 }
 
