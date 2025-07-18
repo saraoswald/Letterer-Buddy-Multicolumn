@@ -22,6 +22,7 @@ var dialog = new Window("palette", "Letterer Buddy", undefined, {
     dialog.alignChildren = ["center","top"]; 
     dialog.spacing = 10; 
     dialog.margins = 16; 
+    dialog.size = [400, 600]; 
     dialog.onClose = function() {
         doc.removeEventListener('afterSelectionChanged', selectionChanged);
         saveOptions();
